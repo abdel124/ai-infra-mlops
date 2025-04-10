@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: iris-api
-          image: iris-api:latest  # 🔥 TEMP image, will replace with ECR later
+          image: iris-api:latest
           ports:
             - containerPort: 5000
-          imagePullPolicy: Never  # Important for using local image during testing
+          imagePullPolicy: Never
