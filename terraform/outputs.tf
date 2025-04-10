@@ -3,6 +3,7 @@ output "cluster_name" {
 }
 
 output "subnet_ids" {
+  ##
   value = module.vpc.private_subnets
 }
 
