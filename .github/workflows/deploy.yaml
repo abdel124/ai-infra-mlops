@@ -1,4 +1,4 @@
-name: Push Docker Image to ECR with Debug
+name: Push Docker Image to ECR with Debug.
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   AWS_REGION: us-west-2
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY: iris-api
-  IMAGE_TAG: test
+  IMAGE_TAG: latest
   ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
 
 jobs:
@@ -53,20 +53,6 @@ jobs:
         aws ecr get-login-password --region ${{ env.AWS_REGION }} \
         | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
 
-    - name: Pull, Tag and Push Alpine Image to ECR
-      run: |
-        IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-        echo "Using IMAGE_URI=$IMAGE_URI"
-
-        echo " Pulling Alpine..."
-        docker pull alpine
-
-        echo "Tagging image..."
-        docker tag alpine $IMAGE_URI
-
-        echo "Pushing image..."
-        docker push $IMAGE_URI
-
     - name: Success Message
       if: ${{ success() }}
       run: echo "Image pushed to ECR successfully!"
@@ -76,3 +62,19 @@ jobs:
         IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
         docker build -t $IMAGE_URI ./model-api
         docker push $IMAGE_URI
+  
+    - name: Update Kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig \
+          --region ${{ env.AWS_REGION }} \
+          --name mlops-cluster
+
+    - name: Deploy New Image to EKS
+      run: |
+        IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+        echo "Updating deployment with image $IMAGE_URI"
+        kubectl set image deployment/iris-api iris-api=$IMAGE_URI --record
+
+    - name: Verify Rollout
+      run: |
+        kubectl rollout status deployment/iris-api
