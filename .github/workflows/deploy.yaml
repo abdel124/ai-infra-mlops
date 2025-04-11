@@ -37,7 +37,7 @@ jobs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: : Check Docker Config After Login
+    - name: Check Docker Config After Login
       run: cat ~/.docker/config.json || echo "No Docker config found"
 
     - name: Pull, Tag and Push Alpine Image to ECR
