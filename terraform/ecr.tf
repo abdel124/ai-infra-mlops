@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "iris_api" {
     scan_on_push = true
   }
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
