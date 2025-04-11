@@ -38,6 +38,14 @@ jobs:
         aws ecr get-login-password --region ${{ env.AWS_REGION }} \
         | docker login --username AWS --password-stdin 349865279621.dkr.ecr.us-west-2.amazonaws.com
 
+    - name: Dry run ECR login + tag
+      run: |
+        IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/iris-api:test
+        echo "Tagging test image..."
+        docker pull alpine
+        docker tag alpine $IMAGE_URI
+        docker push $IMAGE_URI
+
     - name: Build and push Docker image to ECR
       run: |
         IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
