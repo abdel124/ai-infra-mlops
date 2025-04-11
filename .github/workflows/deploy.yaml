@@ -1,7 +1,10 @@
 name: Push Docker Image to ECR with Debug
 
 on:
-  workflow_dispatch:  # You can also use `push` if you prefer.
+  push:
+    branches:
+      - main
+
 
 env:
   AWS_REGION: us-west-2
