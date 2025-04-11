@@ -33,7 +33,7 @@ jobs:
     - name: Build and Push Docker image
       run: |
         IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-        docker build -t $IMAGE_URI .
+        docker build -f ./model-api/Dockerfile -t $IMAGE_URI ./model-api
         docker push $IMAGE_URI
 
     - name: Deploy to EKS
