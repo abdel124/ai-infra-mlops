@@ -19,44 +19,44 @@ jobs:
       contents: read
 
     steps:
-    - name: ✅ Checkout Code
+    - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: ✅ Configure AWS Credentials (OIDC)
+    - name: Configure AWS Credentials (OIDC)
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ secrets.GITHUB_DEPLOY_ROLE }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: 🧠 DEBUG: Show AWS Identity
+    - name:  Show AWS Identity
       run: aws sts get-caller-identity
 
-    - name: 🧠 DEBUG: Check Docker Config Before Login
+    - name: Check Docker Config Before Login
       run: cat ~/.docker/config.json || echo "No Docker config found"
 
-    - name: 🔐 Login to Amazon ECR
+    - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: 🧠 DEBUG: Check Docker Config After Login
+    - name: : Check Docker Config After Login
       run: cat ~/.docker/config.json || echo "No Docker config found"
 
-    - name: 🐳 Pull, Tag and Push Alpine Image to ECR
+    - name: Pull, Tag and Push Alpine Image to ECR
       run: |
         IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-        echo "💡 Using IMAGE_URI=$IMAGE_URI"
+        echo "Using IMAGE_URI=$IMAGE_URI"
 
-        echo "📥 Pulling Alpine..."
+        echo " Pulling Alpine..."
         docker pull alpine
 
-        echo "🏷️  Tagging image..."
+        echo "Tagging image..."
         docker tag alpine $IMAGE_URI
 
-        echo "🚀 Pushing image..."
+        echo "Pushing image..."
         docker push $IMAGE_URI
 
-    - name: ✅ Success Message
+    - name: Success Message
       if: ${{ success() }}
-      run: echo "🎉 Image pushed to ECR successfully!"
+      run: echo "Image pushed to ECR successfully!"
 
     - name: Build and push Docker image to ECR
       run: |
