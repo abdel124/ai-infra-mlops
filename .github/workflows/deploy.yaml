@@ -1,4 +1,4 @@
-name: Push Docker Image to ECR with Debug
+name: Push Docker Image to ECR with Debug.
 
 on:
   push:
