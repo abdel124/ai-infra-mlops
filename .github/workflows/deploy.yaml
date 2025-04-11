@@ -48,6 +48,11 @@ jobs:
           echo "No Docker config found"
         fi
 
+    - name: Native Docker ECR Login (Manual)
+      run: |
+        aws ecr get-login-password --region ${{ env.AWS_REGION }} \
+        | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+
     - name: Pull, Tag and Push Alpine Image to ECR
       run: |
         IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
