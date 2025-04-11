@@ -26,6 +26,11 @@ jobs:
       with:
         role-to-assume: ${{ secrets.DEPLOY_ROLE }}
         aws-region: ${{ env.AWS_REGION }}
+  
+    - name: Debug IMAGE_URI and AWS Credentials
+      run: |
+        echo "IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
+        aws sts get-caller-identity
 
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
