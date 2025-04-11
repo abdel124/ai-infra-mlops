@@ -21,6 +21,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Debug: Check AWS Identity
+      run: aws sts get-caller-identity
+  
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
