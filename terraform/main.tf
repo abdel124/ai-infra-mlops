@@ -25,7 +25,7 @@ module "vpc" {
 ######################
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = "20.8.4"
+  version         = "18.20.0"
   cluster_name    = "mlops-cluster"
   cluster_version = "1.28"
 
@@ -33,6 +33,24 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
 
   enable_irsa = true  # This enables IAM Roles for Service Accounts
+  
+  manage_aws_auth_configmap = true
+
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::349865279621:user/serverless"
+      username = "serverless"
+      groups   = ["system:masters"]
+    }
+  ]
+
+  aws_auth_roles = [
+    {
+      rolearn  = "arn:aws:iam::349865279621:role/GitHubActionsDeployRole"
+      username = "github-actions"
+      groups   = ["system:masters"]
+    }
+  ]
 
   eks_managed_node_groups = {
     mlops_nodes = {
