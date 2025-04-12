@@ -70,9 +70,9 @@ jobs:
           --name mlops-cluster
 
     - name: Apply Deployment YAML
-       run: |
+      run: |
         kubectl apply -f k8s/iris-api-deployment.yaml -n $K8S_NAMESPACE
-        
+
     - name: Deploy New Image to EKS
       run: |
         IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
