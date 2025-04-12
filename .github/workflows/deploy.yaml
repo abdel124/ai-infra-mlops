@@ -71,7 +71,7 @@ jobs:
 
     - name: Apply Deployment YAML
       run: |
-        kubectl apply -f k8s/iris-api-deployment.yaml 
+        kubectl apply -f k8s/deployment/iris-api-deployment.yaml
 
     - name: Deploy New Image to EKS
       run: |
