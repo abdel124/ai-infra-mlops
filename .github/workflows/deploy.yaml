@@ -73,7 +73,7 @@ jobs:
       run: |
         IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
         echo "Updating deployment with image $IMAGE_URI"
-        kubectl set image deployment/iris-api iris-api=$IMAGE_URI --record
+        kubectl set image deployment/iris-api iris-api=$IMAGE_URI
 
     - name: Verify Rollout
       run: |
