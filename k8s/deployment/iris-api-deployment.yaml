@@ -19,4 +19,4 @@ spec:
           image: 349865279621.dkr.ecr.us-west-2.amazonaws.com/iris-api:latest
           ports:
             - containerPort: 5000
-          imagePullPolicy: Never
+          imagePullPolicy: Always
