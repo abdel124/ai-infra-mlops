@@ -79,6 +79,10 @@ jobs:
         echo "Updating deployment with image $IMAGE_URI"
         kubectl set image deployment/iris-api iris-api=$IMAGE_URI
 
+    - name: Apply Service YAML (LoadBalancer)
+      run: |
+         kubectl apply -f k8s/deployment/iris-api-service.yaml
+
     - name: Verify Rollout
       run: |
         kubectl rollout status deployment/iris-api
